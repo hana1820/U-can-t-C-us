@@ -6,7 +6,17 @@
 #include<SDL/SDL_ttf.h>
 #include"EnigmeStatique.h"
 
-int main(void)
+void InitEnigme(enigme *e)
 {
-	return 0;
+
+}
+
+void AfficherEnigme(enigme *e)
+{
+
+}
+
+void ResoudreEnigme(enigme *e)
+{
+
 }
