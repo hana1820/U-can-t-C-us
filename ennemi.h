@@ -1,47 +1,60 @@
-#ifndef Ennemi_H
-#define Ennemi_H
-
+#ifndef ENNEMY_H_INCLUDED
+#define ENNEMY_H_INCLUDED
+#include <stdio.h>
+#include <stdlib.h>
+//#include <stdbool.h>
 #include <SDL/SDL.h>
-//#include "ennemi.h"
-
+#include <SDL/SDL_image.h>
+//#include "player.h"
 #define LARGEUR_FENETRE 1500
 #define HAUTEUR_FENETRE 700
-#define VITESSE_INIT_VOIT 30// vitesse de ennemi
-
-#define NB_VOIES 4//combien de animation de voiture 
-#define LARG_enemi 175//largeur ennnemi
-#define LONG_enemi 175//longeur ennemi
+#define VITESSE_INIT_VOIT 70// vitesse de ennemi 
+#define NB_VOIES 3//combien de animation d'astronaute 
+#define LARG_enemi 175
+#define LONG_enemi 175
 #define MAX_enemi   1900
-struct enemi {
- int vite; //vitesse de ennemi 
-  int ys;     /*   on place la ennemi à l'origine 0 */
-    int voie;
-    // int y;     /* 0 est le début de la route */
-    SDL_Rect coord;     /* coordonnées calculées à l'écran, si le ennemi
-                         est visible */
-//SDL_Surface *Animation_G[4];
-SDL_Surface *Animation_D[4];
-//SDL_Surface *en ; 
-  int vitesse;
-    int visible;
-    int  nbre_vie  ; 
- 
-    // int vitesse; //vitesse de ennemi 
-  int y;     
-  int xvoies[NB_VOIES];
-  SDL_Rect poss ;
+/**
+*@struct entite secondaire
+*@brief struct for entite secondaire
+*/
+typedef enum STATE STATE;
+enum STATE{
+WAITING,
+FOLLOWING,
+//ATTACKING
 };
 
 
+typedef struct 
+{
+SDL_Surface *Animation_G[3];
+SDL_Surface *Animation_D[3];
+SDL_Surface *image;
+int Animation;
+SDL_Rect Position;
+//bool Direction;
+STATE state;
+int distance;
+//int distance_a;
+int vitesse ;
+int xvoies[NB_VOIES];
+int voie ; 
+int ys ; //on place la ennemi à l'origine 0
+int visible ; 
 
-void initEnnemi(struct enemi enemis[]);
-void deplaceranimer( struct enemi enemis[]);
+}Ennemy;
 
-int collision(SDL_Rect posHero, struct enemi enemis[]) ;
-
-void afficher(SDL_Surface *ecran, struct enemi enemis[]);
+typedef struct 
+{ 
+SDL_Rect poss ; 
+} perso ; 
+int  collision(SDL_Rect poss,Ennemy *e) ;
+//int collision (SDL_Rect position1,SDL_Rect position2) ;
+void Initialisation_Ennemy(Ennemy * e,perso * perso);
+void Display_Ennemy(Ennemy *e,SDL_Surface *ecran);
+void Animation_Ennemy(Ennemy *e,perso * perso);
+void Free_Ennemy(Ennemy *e);
 //void setrectss(SDL_Rect clips[9][4]) ;
 
 
 #endif
-
