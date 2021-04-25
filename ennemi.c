@@ -1,223 +1,228 @@
+/**
+*@file ennemi.c
+*@brief tache entite secondaire
+*@author Ahmed Mtibaa
+*@version 1
+*@date Apr 01 ,2021
+*
+*Testing program for entite secondaire*
+*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#include <time.h>
 #include "ennemi.h"
-/* constantes */
+#include <time.h>
+#include<unistd.h>
 #define LARGEUR_FENETRE 1500
 #define HAUTEUR_FENETRE 700
-#define VITESSE_INIT_VOIT 30// vitesse de ennemi 
-#define NB_VOIES 4//combien de animation de voiture 
-#define LARG_ennemi 175
-#define LONG_ennemi 175
-
-
-#define MAX_ennemi   1900 
-int  collision(SDL_Rect poss,struct enemi ennemis[])
+#define VITESSE_INIT_VOIT 70// vitesse de ennemi 
+#define NB_VOIES 3//combien de animation de voiture 
+#define LARG_enemi 175
+#define LONG_enemi 175
+#define MAX_enemi   1900 
+int  collision(SDL_Rect poss,Ennemy *e)
 {
-int n , p  ; 
-SDL_Surface *ecran  ;
-// ennemis->nbre_vie=3 ;  ; 
-int debut=0 ;
-//debut : 
-    for (n=0; n<1900 ; n++) {
-     //p=MAX_ennemi-n ;
-     debut++ ; 
+  
+//int nb=3 ;
 if 
-((poss.y>ennemis[n].coord.y + ennemis[n].coord.h) ||( poss.y+poss.h<ennemis[n].coord.y)||(poss.x+poss.w<ennemis[n].coord.x) || (poss.x>ennemis[n].coord.x + ennemis[n].coord.w))
+((poss.y>e->Position.y + e->Position.h ) ||( poss.y+poss.h< e->Position.y )||(poss.x+poss.w<e->Position.x) || (poss.x>e->Position.x + e->Position.w ))
  {
-return 0 ; 
 
-
-//ennemis->nbre_vie-- ;
- } else 
-//(!(poss.y>ennemis[n].coord.y + ennemis[n].coord.h) ||(poss.x+poss.w<ennemis[n].coord.x) || (poss.x>ennemis[n].coord.x + ennemis[n].coord.w))
+  return 0 ;
+ // return 0 ;
+ }else
  {
- 
-// initEnnemi(ennemis) ; 
- //deplaceranimer(ennemis) ;
-  //afficher(  ecran ,ennemis);
-  if(debut != 1900) 
-  {
-  return 1;
-  }
+ return 1 ;
+ } 
+ /*else
+ { 
+ return 1 ; 
   //return 1 ; 
-   
- }
- 
-/*if (ennemis->nbre_vie==0) 
-{
-return 1; 
-}else 
-{
-return 0 ; 
-} */
- //return debut  ;  
+ }*/
 }
-/*if (vie==0)
-{ 
-return 0 ;
-}else 
+void Initialisation_Ennemy(Ennemy * e,perso * perso)
 {
-return 1  ;
-} */
-
-}
-
- 
- 
-void initEnnemi( struct enemi ennemis[]) 
-{
- 
-    int i,n;
+int n  ; 
+//Ennemy en [MAX_enemi] ; 
    srand(time(NULL)) ; 
-  
-ennemis->Animation_D[1]=IMG_Load("SS.png");
+e->Position.x=750;
+e->Position.y=0;
 
-//enemis->Animation_D[2]=IMG_Load("2g.png");
-//enemis->Animation_D[3]=IMG_Load("3g.png");
+//e->Direction=true;
+e->Animation=1;
+e->state=WAITING;//tache blanche
+e->distance=300;
+//e->distance_a=300;
 
-ennemis->poss.y=400 ; 
-ennemis->poss.x=580  ;   
-ennemis->poss.h=392  ; 
-ennemis->poss.w=386 ; 
+//e->image=IMG_ Load("voiture") ; 
+e->Animation_D[1]=IMG_Load("1g.png");
+e->Animation_D[2]=IMG_Load("2g.png");
+e->Animation_D[3]=IMG_Load("3g.png");
 
-    for (n=0; n<NB_VOIES; n++) 
-
-       ennemis->xvoies[n] = (LARGEUR_FENETRE / NB_VOIES /2) + ((LARGEUR_FENETRE / NB_VOIES) * n)- (LARG_ennemi/ 3); // 2= position de l'ennemi par rapp au perso
-       //collision(enemis->poss,enemis) ;
-    ennemis->vite = VITESSE_INIT_VOIT;
-    ennemis->ys = 0; // 0= pos de descente de ennemi
-
-    /* init ennemi */
-    for (n=0; n<MAX_ennemi; n++) {
- 
-        ennemis[n].voie = rand() % NB_VOIES;
-     ennemis[n].y = (LONG_ennemi + (LONG_ennemi * 4) ) *(n + 1); // la descente dans chaque voie
-        ennemis[n].coord.w = LARG_enemi;
-        ennemis[n].coord.h = LONG_enemi;
-
-    }
-}
-/*void app (SDL_Rect* cl ) 
-{
-//cl[0].x=0 ; 
-//cl[0].y=0 ; 
-cl[0].w=339 ; 
-cl[0].h=243
-
-}*/
-
-void deplaceranimer( struct enemi ennemis[]) 
-{
-    int n;
-  
-    ennemis->ys += ennemis->vite;
-    for (n=0; n<MAX_ennemi ; n++) {
+//e->Animation_G[1]=IMG_Load("1g.png");
+//e->Animation_G[2]=IMG_Load("2g.png");
+//e->Animation_G[3]=IMG_Load("3g.png");
+/*for (n=0; n<NB_VOIES; n++) 
     
-   if (abs(ennemis[n].y - ennemis->ys) < HAUTEUR_FENETRE) {
+        e->xvoies[n] = (LARGEUR_FENETRE / NB_VOIES /2) + ((LARGEUR_FENETRE / NB_VOIES) * n)- (LARG_enemi/ 3); // 2= position de l'ennemi par rapp au perso
+    
+    e->vitesse = VITESSE_INIT_VOIT;
+    e->y = 0; // 0= pos de descente de ennemi
+ for (n=0; n<MAX_enemi; n++) {
+        en[n].voie = rand() % NB_VOIES;
+        en[n].y = (LONG_enemi + (LONG_enemi * 4) ) *(n + 1); // la descente dans chaque voie
+        en[n].Position.w = LARG_enemi;
+        en[n].Position.h = LONG_enemi;
+    }*/
+}
 
-     // if (ennemis[n].y - ennemis->ys < HAUTEUR_FENETRE) {
-          ennemis[n].visible = 1;
-          ennemis[n].coord.x = ennemis->xvoies[ennemis[n].voie];//position aleatoire enemi
-           ennemis[n].coord.y = HAUTEUR_FENETRE - (ennemis[n].y - ennemis->ys);//enemi deplacemnt aleatoire descend
-          
+void Display_Ennemy(Ennemy *e,SDL_Surface *ecran)
+{
+/*if(e->Direction)
+{
+SDL_BlitSurface(e->Animation_D[e->Animation], NULL, ecran, &e->Position);
+//SDL_Flip(ecran);
+}
+else
+{*/ // e->Animation++ ; 
+SDL_BlitSurface(e->Animation_D[e->Animation], NULL, ecran, &e->Position);
+//SDL_Flip(ecran);
+//}
+}
+
+void Animation_Ennemy(Ennemy *e ,perso * perso)
+{
+int n ; 
+   srand(time(NULL)) ; 
+//Ennemy en[MAX_enemi] ; 
+ /*e->y += e->vitesse;
+    for (n=0; n<MAX_enemi ; n++) {
+     
+
+      if (abs(e[n].y - e->y) < HAUTEUR_FENETRE) {
+          e[n].visible = 1;
+          e[n].Position.x = e->xvoies[e[n].voie];//position aleatoire enemi
+            e[n].Position.y = HAUTEUR_FENETRE - (e[n].ys - e->y);//enemi deplacemnt aleatoire descend
+            
        } else
-            ennemis[n].visible = 0;
-    }
-
-} 
-
-
-/*int  collision (SDL_Rect posh ,struct enemi enemis[])  
-{
-int nb;
-nb=3 ;  
-
-if 
+            e[n].visible = 0;
+    }*/
+  for (n=0; n<NB_VOIES; n++) 
 {
 
-return false ;  
-}else 
+       e->xvoies[n] = (LARGEUR_FENETRE / NB_VOIES /2) + ((LARGEUR_FENETRE / NB_VOIES) * n) ;// 2= position de l'ennemi par rapp au perso
+}
+if (e->Position.y==0)
+{
+ e->voie = rand() % 3;
+  //e->Position.y = (LONG_enemi + (LONG_enemi * 1) ) *(n + 1);
+         e->Position.x = e->xvoies[e->voie];
+       }
+      if( collision(perso->poss,e)==0)
+      {
+      e->Position.y==0 ;
+      }
+int dist = (perso->poss.x - e->Position.x);
+//position aleatoire enemi
+if   ((dist > - e->distance) && (dist <  e->distance))
+{
+e->state=FOLLOWING;
+}
+else
+{
+e->state=WAITING;
+}
+switch(e->state)
+{
+case WAITING:
+{
+if (e->Position.y==300) 
 { 
-return true ; 
+e->Position.y-=20 ; 
+}
+e->Animation++;
+
+if(e->Animation==4)
+{
+e->Animation=1;
+}
+/*if(e->Direction)
+{
+e->Direction=true;
+}
+else
+{
+e->Direction=false;
+
+}*/
+
+//if(e->Direction)
+//{
+
+e->Position.y-=20;
+
+
+//e->Position.y-=200;
+//sleep(1) ;
+//}*/
+/*else
+{
+e->Position.y+=20;
+
+}
+
+*/
+break;
+}
+
+
+case FOLLOWING:
+{
+if (e->Position.y==300) 
+{ 
+e->Position.y-=20 ; 
+}
+e->Animation++;
+
+if(e->Animation==4)
+{
+e->Animation=1;
+}
+if(dist<0)
+{
+e->Position.y+=20;
+
+}
+else
+{
+e->Position.y-=20;
+/*if(e->Position.y==300)
+{
+e->Position.y+=20 ; 
+} */
+}
+
+break;
+}
+
+}
+}
+/*int collision (SDL_Rect position1,SDL_Rect position2)
+{
+if( (position1.x > (position2.x+position2.w)) || (position2.x > (position1.x + position1.w)) ||
+(position1.y > (position2.y + position2.h)) || (position2.y > (position1.y + position1.h)) )
+{
+return 0 ;
+}
+else
+{
+return 1 ; 
 }
 }*/
 
-void afficher(  SDL_Surface *ecran,  struct enemi ennemis[])
-{
-    int p,n,i=0;
-p=HAUTEUR_FENETRE/2 ; 
 
-
-   for (n=0; n<MAX_ennemi; n++) 
-    {
-   i++  ;
-  
-         if (ennemis[n].visible)
-        {
-  //SDL_Delay(500) ; 
-                         SDL_BlitSurface(ennemis->Animation_D[1],NULL, ecran, &ennemis[n].coord);
-                                     
-                         // SDL_Flip(ecran); 
-        //if(ennemis[n].coord.y=100 ) 
-
-        //{  
-        //ennemis[n].coord.x = game->xvoies[enemis[n].voie];       
-         //ennemis[n].coord.y = HAUTEUR_FENETRE - (ennemis[n].y - car->y);      
-               //SDL_BlitSurface(ennemis->Animation_D[1],NULL, ecran, &ennemis[n].coord);
-             //SDL_BlitSurface(ennemis->Animation_D[2],NULL, ecran, &ennemis[n].coord);
-
-                           //   SDL_Flip(ecran);
-                            //    SDL_BlitSurface(ennemis->Animation_D[2],NULL, ecran, &ennemis[n].coord);
-                                   //   SDL_BlitSurface(ennemis->Animation_D[2],NULL, ecran, &ennemis[n].coord)
-       // }else if (ennemis[n].coord.y=400) 
-        //{
-                   
-               // ennemis[n].coord.x = game->xvoies[ennemis[n].voie];
-              //  ennemis[n].coord.y = HAUTEUR_FENETRE - (ennemis[n].y - car->y);
-                // SDL_Flip(ecran);
-                      //SDL_BlitSurface(ennemis->Animation_D[2],NULL, ecran, &ennemis[n].coord);
-//                  SDL_BlitSurface(ennemis->Animation_D[3],NULL, ecran, &ennemis[n].coord);
-
-
-    
-  //      }
-      }
-
-        }
-       /* i++ ;
-        if (i==1)
-        {
-
-
-           //         SDL_BlitSurface(ennemis->Animation_D[3],NULL, ecran, &ennemis[n].coord);
-       } else if (i==2)
-       {
-              SDL_BlitSurface(ennemis->Animation_D[i],NULL, ecran, &ennemis[n].coord);
-               //SDL_BlitSurface(ennemis->Animation_D[1],NULL, ecran, &ennemis[n].coord);
-                                  // SDL_BlitSurface(ennemis->Animation_D[3],NULL, ecran, &ennemis[n].coord);
-
-       }else 
-       { 
-       i++ ; 
-             SDL_BlitSurface(ennemis->Animation_D[i],NULL, ecran, &ennemis[n].coord);
-               i==0 ; 
-       } 
-       
-       }
-       
-       }*/
-           /*else if (i==2)
-     {
-            SDL_BlitSurface(enemis->Animation_D[2],NULL, ecran, &ennemis[n].coord);
-      }else 
-      {
-            SDL_BlitSurface(enemis->Animation_D[3],NULL, ecran, &ennemis[n].coord); 
-           }*/
-    
-   SDL_Flip(ecran);
-    }
- 
 
 /*void setrectss(SDL_Rect clips[9][4])
 {
@@ -240,9 +245,11 @@ int j,i ;
     clips[8][i].w=1536;
   }
 }
-
-/*void freeEnnemi(Ennemi *E)
+void Free_Ennemy(Ennemy *e)
 {
-	SDL_FreeSurface(E->image);
+for(int i=1;i<4;i++)
+{
+SDL_FreeSurface(e->Animation_D[i]);
+SDL_FreeSurface(e->Animation_G[i]);
+}
 }*/
-
